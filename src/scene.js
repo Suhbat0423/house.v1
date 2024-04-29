@@ -16,13 +16,13 @@ const camera = new THREE.PerspectiveCamera(
   1000
 );
 
-let cameraRadius = 10;
+let cameraRadius = 5;
 let cameraAzimuth = 0;
 let cameraElevation = 0;
 let isMouseDown = false;
 let prevMouseX = 0;
 let prevMouseY = 0;
-camera.position.z = 3;
+camera.position.z = 5;
 
 // ============================ render ==========================
 
@@ -87,7 +87,7 @@ const ground = () => {
 };
 
 const grasses = () => {
-  const grassMaterial = new THREE.MeshLambertMaterial({ color: 0x135510 });
+  const grassMaterial = new THREE.MeshBasicMaterial({ color: 0x135510 });
   const grassGeometry = new THREE.BoxGeometry(0.1, 1, 0.1);
   const numberOfGrasses = 5000;
   for (let i = 0; i < numberOfGrasses; i++) {
@@ -513,18 +513,24 @@ const carpet = () => {
   scene.add(carpet);
 };
 
-const roof1 = () => {};
+const roof = () => {
+  const roofGeometry = new THREE.BoxGeometry(74, 3, 62);
+  const roofMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
+  const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+  roof.position.set(0, 16, 12);
+  scene.add(roof);
+};
 
-const flowers = () => {
+const flowers = (a, b, c) => {
   loader.load(
-    "../icon/blue_flower_animated.glb",
+    "../icon/lavender_vase.glb",
     function (gltf) {
       // Set the position of the model
-      gltf.scene.position.set(65, 29.2, -68);
+      gltf.scene.position.set(a, b, c);
       gltf.scene.rotation.y = Math.PI / 2;
 
       // Scale down the model
-      gltf.scene.scale.set(10, 10, 10);
+      gltf.scene.scale.set(3.5, 3.5, 3.5);
 
       scene.add(gltf.scene);
     },
@@ -537,21 +543,162 @@ const flowers = () => {
   );
 };
 
-flowers();
+const streetLigth = (a, b, c) => {
+  loader.load(
+    "../icon/free_streetlight.glb",
+    function (gltf) {
+      // Set the position of the model
+      gltf.scene.position.set(a, b, c);
+      gltf.scene.rotation.y = Math.PI / 0.8;
+
+      // Scale down the model
+      gltf.scene.scale.set(8, 8, 8);
+
+      scene.add(gltf.scene);
+    },
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    function (error) {
+      console.error("Error loading GLTF model", error);
+    }
+  );
+};
+
+const kitchen = (a, b, c) => {
+  loader.load(
+    "../icon/kitchen.glb",
+    function (gltf) {
+      // Set the position of the model
+      gltf.scene.position.set(a, b, c);
+      gltf.scene.rotation.y = Math.PI / 2;
+
+      // Scale down the model
+      gltf.scene.scale.set(0.085, 0.085, 0.085);
+
+      scene.add(gltf.scene);
+    },
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    function (error) {
+      console.error("Error loading GLTF model", error);
+    }
+  );
+};
+
+const sofa = (a, b, c) => {
+  loader.load(
+    "../icon/sofa.glb",
+    function (gltf) {
+      // Set the position of the model
+      gltf.scene.position.set(a, b, c);
+      gltf.scene.rotation.y = Math.PI / 2;
+
+      // Scale down the model
+      gltf.scene.scale.set(0.2, 0.2, 0.2);
+
+      scene.add(gltf.scene);
+    },
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    function (error) {
+      console.error("Error loading GLTF model", error);
+    }
+  );
+};
+
+const shiree = () => {
+  // Define the tableGroup variable globally
+  const tableGroup = new THREE.Group();
+
+  const shiree = () => {
+    // Create table top
+    const tabletopGeometry = new THREE.BoxGeometry(4, 0.1, 2); // Adjust size as needed
+    const tabletopMaterial = new THREE.MeshLambertMaterial({ color: 0xa9a9a9 }); // Adjust color as needed
+    const tabletop = new THREE.Mesh(tabletopGeometry, tabletopMaterial);
+    tabletop.position.y = -0.1;
+
+    // Create table legs
+    const legGeometry = new THREE.BoxGeometry(0.1, 0.8, 0.1); // Adjust size as needed
+    const legMaterial = new THREE.MeshLambertMaterial({ color: 0xa9a9a9 }); // Adjust color as needed
+
+    const leg1 = new THREE.Mesh(legGeometry, legMaterial);
+    leg1.position.set(-1.8, -0.45, 0.8); // Adjust position as needed
+
+    const leg2 = new THREE.Mesh(legGeometry, legMaterial);
+    leg2.position.set(1.8, -0.45, 0.8); // Adjust position as needed
+
+    const leg3 = new THREE.Mesh(legGeometry, legMaterial);
+    leg3.position.set(-1.8, -0.45, -0.8); // Adjust position as needed
+
+    const leg4 = new THREE.Mesh(legGeometry, legMaterial);
+    leg4.position.set(1.8, -0.45, -0.8); // Adjust position as needed
+
+    // Add components to the tableGroup
+    tableGroup.add(tabletop, leg1, leg2, leg3, leg4);
+
+    // Scale the table group
+    tableGroup.scale.set(3, 3, 3); // Adjust scale factors as needed
+
+    // Position the table group
+    tableGroup.position.set(0, 0, 26); // Adjust position as needed
+
+    return tableGroup;
+  };
+
+  // Add the table group to the scene
+  scene.add(shiree());
+};
+
+const bed = () => {
+  // Create a group to hold both the bed frame and mattress
+  var bedGroup = new THREE.Group();
+
+  // Create bed frame
+  var bedFrameGeometry = new THREE.BoxGeometry(5, 2, 12);
+  var bedFrameMaterial = new THREE.MeshBasicMaterial({ color: 0x663300 }); // Brown color
+  var bedFrame = new THREE.Mesh(bedFrameGeometry, bedFrameMaterial);
+  bedGroup.add(bedFrame);
+
+  // Create mattress
+  var mattressGeometry = new THREE.BoxGeometry(4.8, 0.2, 10.8);
+  var mattressMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff }); // White color
+  var mattress = new THREE.Mesh(mattressGeometry, mattressMaterial);
+  mattress.position.y = 1; // Adjust position to sit on the bed frame
+  bedGroup.add(mattress);
+
+  // Scale the bed group
+  var scaleValue = 1.5; // Adjust the scale factor as needed
+  bedGroup.scale.set(scaleValue, scaleValue, scaleValue);
+  bedGroup.position.set(30, -1, 32);
+
+  // Add the bed group to the scene
+  scene.add(bedGroup);
+};
+
+bed();
+sofa(1, -2, 17);
+shiree();
+kitchen(-29, -3, 41);
+streetLigth(40, 31, -70);
+streetLigth(-40, 31, -70);
+flowers(8, 0, -22);
+flowers(-8.5, 0, -22);
 carpet();
-roof1();
+roof();
 zuragt();
-flower();
 ground();
 grasses();
 fence();
 path();
 house();
 road();
-stand(32, 5, -16);
-stand(-32, 5, -16);
-stand(8, 5, -16);
-stand(-8, 5, -16);
+stand(32, 6, -16);
+stand(-32, 6, -16);
+stand(8, 6, -16);
+stand(-8, 6, -16);
 door();
 
 createWindow(14, -0.25, -5.5, 11.25, 6.75);
